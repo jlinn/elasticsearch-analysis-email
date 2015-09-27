@@ -1,0 +1,29 @@
+{
+    "analysis": {
+        "tokenizer": {
+            "email_domain": {
+                "type": "email",
+                "part": "domain"
+            },
+            "email_localpart": {
+                "type": "email",
+                "part": "localpart"
+            },
+            "email_all": {
+                "type": "email",
+                "allow_malformed": true
+            }
+        },
+        "analyzer": {
+            "email_domain": {
+                "tokenizer": "email_domain"
+            },
+            "email_localpart": {
+                "tokenizer": "email_localpart"
+            },
+            "email_all": {
+                "tokenizer": "email_all"
+            }
+        }
+    }
+}

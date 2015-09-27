@@ -1,0 +1,17 @@
+{
+    "properties": {
+        "email": {
+            "type": "string",
+            "fields": {
+                "raw": {"index": "not_analyzed", "type": "string"},
+                "localpart": {"analyzer": "email_localpart", "type": "string"},
+                "domain": {"analyzer": "email_domain", "type": "string"}
+            },
+            "analyzer": "email_all"
+        },
+        "email_malformed": {
+            "type": "string",
+            "analyzer": "email_all"
+        }
+    }
+}
