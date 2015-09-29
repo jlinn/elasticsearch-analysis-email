@@ -1,6 +1,8 @@
 package org.elasticsearch.index.analysis.email;
 
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHits;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -23,6 +25,25 @@ public class EmailTokenizerIntegrationTest extends EmailAnalysisTestCase {
         assertTokensContain("foo+bar@email.com", "email_all", "foo", "foo+bar", "foo@email.com", "foo+bar@email.com", "email.com", "com");
 
         assertTokensContain("foo+bar@email@com", "email_all", "foo+bar@email@com");
+    }
+
+
+    @Test
+    public void testSearch() {
+        client().prepareIndex(INDEX, "test", "1").setSource("email", "foo+bar-baz@email.com").get();
+        client().prepareIndex(INDEX, "test", "2").setSource("email", "foo+barbaz@email.net").get();
+        client().prepareIndex(INDEX, "test", "3").setSource("email", "foo+bar_baz@a.email.net").get();
+
+        refresh();
+
+        SearchHits hits = client().prepareSearch(INDEX).setQuery(QueryBuilders.queryStringQuery("email.domain:email.*")).get().getHits();
+        assertThat(hits.getHits().length, equalTo(3));
+
+        hits = client().prepareSearch(INDEX).setQuery(QueryBuilders.queryStringQuery("email.domain:*.email.*")).get().getHits();
+        assertThat(hits.getHits().length, equalTo(1));
+
+        hits = client().prepareSearch(INDEX).setQuery(QueryBuilders.termQuery("email.localpart", "baz")).get().getHits();
+        assertThat(hits.getHits().length, equalTo(2));
     }
 
 

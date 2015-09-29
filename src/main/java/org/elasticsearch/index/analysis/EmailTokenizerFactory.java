@@ -20,6 +20,7 @@ public class EmailTokenizerFactory extends AbstractTokenizerFactory {
     private boolean tokenizeDomain;
     private boolean splitOnPlus;
     private boolean allowMalformed;
+    private String[] splitLocalpart;
 
     @Inject
     public EmailTokenizerFactory(Index index, @IndexSettings Settings indexSettings, @Assisted String name, @Assisted Settings settings) {
@@ -32,6 +33,7 @@ public class EmailTokenizerFactory extends AbstractTokenizerFactory {
         this.tokenizeDomain = settings.getAsBoolean("tokenize_domain", true);
         this.splitOnPlus = settings.getAsBoolean("split_on_plus", true);
         this.allowMalformed = settings.getAsBoolean("allow_malformed", false);
+        this.splitLocalpart = settings.getAsArray("split_localpart", null);
     }
 
     @Override
@@ -41,6 +43,7 @@ public class EmailTokenizerFactory extends AbstractTokenizerFactory {
         tokenizer.setTokenizeDomian(tokenizeDomain);
         tokenizer.setSplitOnPlus(splitOnPlus);
         tokenizer.setAllowMalformed(allowMalformed);
+        tokenizer.setSplitLocalpart(splitLocalpart);
         return tokenizer;
     }
 }

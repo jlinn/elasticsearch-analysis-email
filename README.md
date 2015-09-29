@@ -19,6 +19,7 @@ bin/plugin --install analysis-url --url https://github.com/jlinn/elasticsearch-a
 * `part`: Defaults to `null`. If left `null`, all email address parts will be tokenized. Options are `whole`, `localpart`, and `domain`.
 * `tokenize_domain`: Defaults to `true`. If `true`, the domain will be further tokenized using a [reverse path hierarchy tokenizer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-pathhierarchy-tokenizer.html) with the delimiter set to `.`.
 * `split_on_plus`: Defaults to `true`. If `true`, the localpart of the email address will be split on the first instance of `+`, and both the part preceding `+` and the whole localpart will be used as tokens.
+* `split_localpart`: Defaults to `null`. This parameter expects an array of strings. If provided, the localpart will be split on each of the given strings.
 * `allow_malformed`: Defaults to `false`. If `true`, malformed email addresses will not be rejected, but will be indexed without tokenization.
 
 ### Example:

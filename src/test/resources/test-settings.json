@@ -7,7 +7,8 @@
             },
             "email_localpart": {
                 "type": "email",
-                "part": "localpart"
+                "part": "localpart",
+                "split_localpart": ["-", "_"]
             },
             "email_all": {
                 "type": "email",

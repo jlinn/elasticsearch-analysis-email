@@ -6,6 +6,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.apache.lucene.util.AttributeFactory;
+import org.elasticsearch.common.base.Splitter;
 import org.elasticsearch.common.base.Strings;
 import org.elasticsearch.common.collect.ImmutableList;
 import org.elasticsearch.common.lang3.StringUtils;
@@ -47,6 +48,10 @@ public final class EmailTokenizer extends Tokenizer {
      */
     private boolean allowMalformed;
 
+    /**
+     * If set, the localpart will be split on each of the strings in this array, and the resulting parts will all become tokens.
+     */
+    private String[] splitLocalpart;
 
     private final CharTermAttribute termAttribute = addAttribute(CharTermAttribute.class);
     private final TypeAttribute typeAttribute = addAttribute(TypeAttribute.class);
@@ -86,6 +91,11 @@ public final class EmailTokenizer extends Tokenizer {
 
     public EmailTokenizer setAllowMalformed(boolean allowMalformed) {
         this.allowMalformed = allowMalformed;
+        return this;
+    }
+
+    public EmailTokenizer setSplitLocalpart(String[] splitLocalpart) {
+        this.splitLocalpart = splitLocalpart;
         return this;
     }
 
@@ -190,6 +200,19 @@ public final class EmailTokenizer extends Tokenizer {
         if (splitOnPlus && localPart.contains("+")) {
             String beforePlus = StringUtils.substringBefore(localPart, "+");
             tokens.add(new Token(beforePlus, EmailPart.LOCALPART, 0, getEndIndex(0, beforePlus)));
+        }
+        if (splitLocalpart != null) {
+            int start;
+            for (String delimiter : splitLocalpart) {
+                if (!localPart.contains(delimiter)) {
+                    continue;
+                }
+                start = 0;
+                for (String part : Splitter.on(delimiter).splitToList(localPart)) {
+                    tokens.add(new Token(part, EmailPart.LOCALPART, start, start + part.length()));
+                    start += part.length() + delimiter.length();
+                }
+            }
         }
         return tokens;
     }

@@ -45,6 +45,22 @@ public class EmailTokenizerTest extends BaseTokenStreamTestCase {
     }
 
 
+    @Test
+    public void testSplitLocalpart() throws IOException {
+        EmailTokenizer tokenizer = createTokenizer("foo.bar_baz@gmail.com", EmailPart.LOCALPART);
+        tokenizer.setSplitLocalpart(new String[]{".", "_"});
+        assertTokenStreamContents(tokenizer, stringArray("foo.bar_baz", "foo", "bar_baz", "foo.bar", "baz"));
+
+        tokenizer = createTokenizer("foo.bar_baz@gmail.com", EmailPart.LOCALPART);
+        tokenizer.setSplitLocalpart(new String[]{".", "_"});
+        assertThat(tokenizer, hasTokenAtOffset("bar_baz", 4, 11));
+
+        tokenizer = createTokenizer("foo.bar_baz@gmail.com", EmailPart.LOCALPART);
+        tokenizer.setSplitLocalpart(new String[]{".", "_"});
+        assertThat(tokenizer, hasTokenAtOffset("baz", 8, 11));
+    }
+
+
     private EmailTokenizer createTokenizer(String input, EmailPart part) {
         return new EmailTokenizer(new StringReader(input), part);
     }
