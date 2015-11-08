@@ -12,7 +12,7 @@ This plugin enables email address tokenization.
 
 ## Installation
 ```bash
-bin/plugin install analysis-url --url https://github.com/jlinn/elasticsearch-analysis-email/releases/download/v2.0.0/elasticsearch-analysis-url-2.0.0.zip
+bin/plugin install analysis-email --url https://github.com/jlinn/elasticsearch-analysis-email/releases/download/v2.0.0/elasticsearch-analysis-email-2.0.0.zip
 ```
 
 ## Usage
