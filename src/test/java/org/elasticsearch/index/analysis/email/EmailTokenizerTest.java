@@ -61,8 +61,10 @@ public class EmailTokenizerTest extends BaseTokenStreamTestCase {
     }
 
 
-    private EmailTokenizer createTokenizer(String input, EmailPart part) {
-        return new EmailTokenizer(new StringReader(input), part);
+    private EmailTokenizer createTokenizer(String input, EmailPart part) throws IOException {
+        EmailTokenizer tokenizer = new EmailTokenizer(part);
+        tokenizer.setReader(new StringReader(input));
+        return tokenizer;
     }
 
     private String[] stringArray(String... strings) {

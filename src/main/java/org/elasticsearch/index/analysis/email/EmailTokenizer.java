@@ -1,15 +1,14 @@
 package org.elasticsearch.index.analysis.email;
 
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.path.ReversePathHierarchyTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.apache.lucene.util.AttributeFactory;
-import org.elasticsearch.common.base.Splitter;
-import org.elasticsearch.common.base.Strings;
-import org.elasticsearch.common.collect.ImmutableList;
-import org.elasticsearch.common.lang3.StringUtils;
 import org.elasticsearch.index.analysis.EmailPart;
 
 import java.io.IOException;
@@ -60,17 +59,15 @@ public final class EmailTokenizer extends Tokenizer {
     private List<Token> tokens;
     private Iterator<Token> iterator;
 
-    public EmailTokenizer(Reader input) {
-        super(input);
-    }
+    public EmailTokenizer() { }
 
-    public EmailTokenizer(Reader input, EmailPart part) {
-        this(input);
+
+    public EmailTokenizer(EmailPart part) {
         this.part = part;
     }
 
-    public EmailTokenizer(AttributeFactory factory, Reader input) {
-        super(factory, input);
+    public EmailTokenizer(AttributeFactory factory) {
+        super(factory);
     }
 
 
@@ -180,7 +177,9 @@ public final class EmailTokenizer extends Tokenizer {
                     end = getEndIndex(start, partString);
                     return ImmutableList.of(new Token(partString, part, start, end));
                 }
-                return tokenize(part, new ReversePathHierarchyTokenizer(new StringReader(partString), '.', '.'), start);
+                ReversePathHierarchyTokenizer tokenizer = new ReversePathHierarchyTokenizer('.', '.');
+                tokenizer.setReader(new StringReader(partString));
+                return tokenize(part, tokenizer, start);
             case WHOLE:
                 end = partString.length();
                 break;
@@ -198,7 +197,7 @@ public final class EmailTokenizer extends Tokenizer {
         List<Token> tokens = new ArrayList<>(1);
         tokens.add(new Token(localPart, EmailPart.LOCALPART, 0, getEndIndex(0, localPart)));
         if (splitOnPlus && localPart.contains("+")) {
-            String beforePlus = StringUtils.substringBefore(localPart, "+");
+            String beforePlus = substringBefore(localPart, "+");
             tokens.add(new Token(beforePlus, EmailPart.LOCALPART, 0, getEndIndex(0, beforePlus)));
         }
         if (splitLocalpart != null) {
@@ -248,7 +247,7 @@ public final class EmailTokenizer extends Tokenizer {
     private List<Token> tokenizeSpecial(String email) {
         List<Token> tokens = new ArrayList<>();
         if (splitOnPlus && email.contains("+")) {
-            final String withoutPlus = StringUtils.substringBefore(email, "+") + "@" + StringUtils.substringAfter(email, "@");
+            final String withoutPlus = substringBefore(email, "+") + "@" + substringAfter(email, "@");
             tokens.add(new Token(withoutPlus, EmailPart.WHOLE, 0, email.length() - 1));
         }
         return tokens;
@@ -274,9 +273,9 @@ public final class EmailTokenizer extends Tokenizer {
     private String getPart(String email, EmailPart part) {
         switch (part) {
             case DOMAIN:
-                return StringUtils.substringAfter(email, "@");
+                return substringAfter(email, "@");
             case LOCALPART:
-                return StringUtils.substringBefore(email, "@");
+                return substringBefore(email, "@");
             case WHOLE:
             default:
                 return email;
@@ -299,6 +298,37 @@ public final class EmailTokenizer extends Tokenizer {
             buffer.append(arr, 0, numCharsRead);
         }
         return buffer.toString();
+    }
+
+
+    /**
+     * Retrieve the part of the given string before the first occurrence of the given separator
+     * @param str the string from which to extract a substring
+     * @param separator the separator to search for
+     * @return part of the string before the separator. If the separator is not found, the whole string will be returned.
+     */
+    private String substringBefore(String str, String separator) {
+        final int position = str.indexOf(separator);
+        if (position == -1) {
+            // separator not found in str
+            return str;
+        }
+        return str.substring(0, position);
+    }
+
+
+    /**
+     * Extract the part of the given string which occurs after the first instance of the given separator
+     * @param str the strong from which to extract a substring
+     * @param separator the separator to search for
+     * @return part of the string after the separator. If the separator is not found, an empty string is returned.
+     */
+    private String substringAfter(String str, String separator) {
+        final int position = str.indexOf(separator);
+        if (position == -1) {
+            return "";
+        }
+        return str.substring(position + 1, str.length());
     }
 
 

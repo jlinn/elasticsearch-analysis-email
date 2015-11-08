@@ -1,15 +1,13 @@
 package org.elasticsearch.index.analysis;
 
+import com.google.common.base.Strings;
 import org.apache.lucene.analysis.Tokenizer;
-import org.elasticsearch.common.base.Strings;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.inject.assistedinject.Assisted;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.Index;
 import org.elasticsearch.index.analysis.email.EmailTokenizer;
 import org.elasticsearch.index.settings.IndexSettings;
-
-import java.io.Reader;
 
 /**
  * Joe Linn
@@ -37,8 +35,8 @@ public class EmailTokenizerFactory extends AbstractTokenizerFactory {
     }
 
     @Override
-    public Tokenizer create(Reader reader) {
-        EmailTokenizer tokenizer = new EmailTokenizer(reader);
+    public Tokenizer create() {
+        EmailTokenizer tokenizer = new EmailTokenizer();
         tokenizer.setPart(part);
         tokenizer.setTokenizeDomian(tokenizeDomain);
         tokenizer.setSplitOnPlus(splitOnPlus);

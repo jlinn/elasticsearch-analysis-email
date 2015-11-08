@@ -1,6 +1,5 @@
 package org.elasticsearch.index.analysis;
 
-import org.elasticsearch.ElasticsearchIllegalArgumentException;
 
 /**
  * Joe Linn
@@ -17,6 +16,6 @@ public enum EmailPart {
                 return emailPart;
             }
         }
-        throw new ElasticsearchIllegalArgumentException("Unrecognized email part: " + part);
+        throw new IllegalArgumentException("Unrecognized email part: " + part);
     }
 }

@@ -2,13 +2,13 @@ package org.elasticsearch.plugin.analysis;
 
 import org.elasticsearch.index.analysis.AnalysisModule;
 import org.elasticsearch.index.analysis.EmailTokenAnalysisBinderProcessor;
-import org.elasticsearch.plugins.AbstractPlugin;
+import org.elasticsearch.plugins.Plugin;
 
 /**
  * Joe Linn
  * 9/26/2015
  */
-public class AnalysisEmailPlugin extends AbstractPlugin {
+public class AnalysisEmailPlugin extends Plugin {
     @Override
     public String name() {
         return "analysis-email";
