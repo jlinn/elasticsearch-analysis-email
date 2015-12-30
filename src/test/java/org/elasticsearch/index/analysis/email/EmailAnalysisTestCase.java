@@ -1,12 +1,13 @@
 package org.elasticsearch.index.analysis.email;
 
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
-import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.plugin.analysis.AnalysisEmailPlugin;
+import org.elasticsearch.plugins.Plugin;
 import org.elasticsearch.test.ESIntegTestCase;
 import org.elasticsearch.test.StreamsUtils;
 import org.junit.Before;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,14 +18,11 @@ public abstract class EmailAnalysisTestCase extends ESIntegTestCase {
     protected static final String INDEX = "email_token_filter";
 
 
+    @SuppressWarnings("unchecked")
     @Override
-    protected Settings nodeSettings(int nodeOrdinal) {
-        return Settings.builder()
-                .put(super.nodeSettings(nodeOrdinal))
-                .put("plugin.types", AnalysisEmailPlugin.class.getName())
-                .build();
+    protected Collection<Class<? extends Plugin>> nodePlugins() {
+        return pluginList(AnalysisEmailPlugin.class);
     }
-
 
     @Before
     @Override

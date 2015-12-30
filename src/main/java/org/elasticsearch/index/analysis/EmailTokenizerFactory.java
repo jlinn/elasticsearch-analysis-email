@@ -7,7 +7,7 @@ import org.elasticsearch.common.inject.assistedinject.Assisted;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.Index;
 import org.elasticsearch.index.analysis.email.EmailTokenizer;
-import org.elasticsearch.index.settings.IndexSettings;
+import org.elasticsearch.index.settings.IndexSettingsService;
 
 /**
  * Joe Linn
@@ -21,8 +21,8 @@ public class EmailTokenizerFactory extends AbstractTokenizerFactory {
     private String[] splitLocalpart;
 
     @Inject
-    public EmailTokenizerFactory(Index index, @IndexSettings Settings indexSettings, @Assisted String name, @Assisted Settings settings) {
-        super(index, indexSettings, name, settings);
+    public EmailTokenizerFactory(Index index, IndexSettingsService indexSettings, @Assisted String name, @Assisted Settings settings) {
+        super(index, indexSettings.indexSettings(), name, settings);
 
         String partString = settings.get("part");
         if (!Strings.isNullOrEmpty(partString)) {
