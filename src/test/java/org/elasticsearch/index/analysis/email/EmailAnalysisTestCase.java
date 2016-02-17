@@ -11,7 +11,7 @@ import java.util.List;
  * Joe Linn
  * 9/26/2015
  */
-public class EmailAnalysisTestCase extends ElasticsearchSingleNodeTest {
+public abstract class EmailAnalysisTestCase extends ElasticsearchSingleNodeTest {
     protected static final String INDEX = "email_token_filter";
 
     @Before

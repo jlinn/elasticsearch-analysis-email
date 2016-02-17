@@ -23,6 +23,9 @@ public class EmailTokenizerTest extends BaseTokenStreamTestCase {
         assertThat(tokenizer, hasTokenAtOffset("com", 14, 17));
         tokenizer = createTokenizer("foo+bar@gmail.com", EmailPart.DOMAIN);
         assertThat(tokenizer, hasTokenAtOffset("gmail.com", 8, 17));
+
+        tokenizer = createTokenizer("foo+Bar@gmail.com", EmailPart.DOMAIN);
+        assertThat(tokenizer, hasTokenAtOffset("gmail.com", 8, 17));
     }
 
 
