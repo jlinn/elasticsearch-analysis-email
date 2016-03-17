@@ -7,6 +7,7 @@ This plugin enables email address tokenization.
 ## Compatibility
 | Elasticsearch Version | Plugin Version |
 |-----------------------|----------------|
+| 2.2.1 | 2.2.1 |
 | 2.2.0 | 2.2.0 |
 | 2.1.1 | 2.1.1 |
 | 2.0.0 | 2.0.0 |
@@ -14,7 +15,7 @@ This plugin enables email address tokenization.
 
 ## Installation
 ```bash
-bin/plugin install https://github.com/jlinn/elasticsearch-analysis-email/releases/download/v2.1.1/elasticsearch-analysis-email-2.1.1.zip
+bin/plugin install https://github.com/jlinn/elasticsearch-analysis-email/releases/download/v2.2.1/elasticsearch-analysis-email-2.2.1.zip
 ```
 
 ## Usage
