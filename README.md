@@ -18,7 +18,7 @@ This plugin enables email address tokenization.
 
 ## Installation
 ```bash
-bin/plugin install https://github.com/jlinn/elasticsearch-analysis-email/releases/download/v2.3.0/elasticsearch-analysis-email-2.3.0.zip
+bin/plugin install https://github.com/jlinn/elasticsearch-analysis-email/releases/download/v2.3.3/elasticsearch-analysis-email-2.3.3.zip
 ```
 
 ## Usage
